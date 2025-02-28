@@ -10,17 +10,23 @@ jobs:
   create-pull-request:
     runs-on: ubuntu-latest
     steps:
-      # Étape 1 : Récupérer le code du dépôt
+      # Étape 1 : Configurer Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Version compatible avec votre projet (Express)
+
+      # Étape 2 : Récupérer le code du dépôt
       - name: Checkout du code
         uses: actions/checkout@v3
 
-      # Étape 2 : Simuler un changement dans le projet (exemple : mise à jour de package.json)
+      # Étape 3 : Simuler un changement dans le projet (exemple : mise à jour de package.json)
       - name: Mettre à jour package.json
         run: |
           npm install --save lodash  # Exemple : ajouter une dépendance
-          echo "Mise à jour automatique le $(date)" >> README.md  # Ajouter une note dans README
+          echo "Mise à jour automatique le $(date)" >> CHANGELOG.md  # Ajouter une note dans CHANGELOG (au lieu de README.md)
 
-      # Étape 3 : Créer le pull request
+      # Étape 4 : Créer le pull request
       - name: Créer le Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
@@ -30,8 +36,8 @@ jobs:
             Cette PR a été créée automatiquement par GitHub Actions.
             Changements :
             - Mise à jour de package.json (ex. ajout de lodash)
-            - Ajout d'une note dans README.md
+            - Ajout d'une note dans CHANGELOG.md
           branch: "auto-backend-update"  # Nom de la branche temporaire
           base: "master"  # Branche cible (votre branche principale)
           labels: "automatisé, backend"
-          delete-branch: true  # Supprimer la branche après fusion
+          delete-branch: true  # Supprimer la branche après fusiong
