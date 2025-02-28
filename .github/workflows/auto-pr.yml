@@ -1,0 +1,37 @@
+name: Automatisation Pull Request Backend
+
+# Déclencher le workflow à chaque push sur la branche master
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      # Étape 1 : Récupérer le code du dépôt
+      - name: Checkout du code
+        uses: actions/checkout@v3
+
+      # Étape 2 : Simuler un changement dans le projet (exemple : mise à jour de package.json)
+      - name: Mettre à jour package.json
+        run: |
+          npm install --save lodash  # Exemple : ajouter une dépendance
+          echo "Mise à jour automatique le $(date)" >> README.md  # Ajouter une note dans README
+
+      # Étape 3 : Créer le pull request
+      - name: Créer le Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "Mise à jour automatique du backend"
+          title: "Auto PR : Mise à jour du projet backend"
+          body: |
+            Cette PR a été créée automatiquement par GitHub Actions.
+            Changements :
+            - Mise à jour de package.json (ex. ajout de lodash)
+            - Ajout d'une note dans README.md
+          branch: "auto-backend-update"  # Nom de la branche temporaire
+          base: "master"  # Branche cible (votre branche principale)
+          labels: "automatisé, backend"
+          delete-branch: true  # Supprimer la branche après fusion
