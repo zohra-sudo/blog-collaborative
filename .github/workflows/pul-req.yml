@@ -1,0 +1,30 @@
+name: PR Automatique auto-backend-update vers Master
+
+# Déclencher le workflow à chaque push sur la branche auto-backend-update
+on:
+  push:
+    branches:
+      - auto-backend-update
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      # Étape 1 : Récupérer le code du dépôt
+      - name: Checkout du code
+        uses: actions/checkout@v3
+
+      # Étape 2 : Créer le pull request de auto-backend-update vers master
+      - name: Créer le Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "Changements de auto-backend-update vers master"
+          title: "PR Auto : Intégration de auto-backend-update dans master"
+          body: |
+            Cette PR a été créée automatiquement par GitHub Actions.
+            Elle intègre les changements de la branche auto-backend-update (incluant src/index.js) dans master.
+            Vérifiez les modifications avant de fusionner.
+          branch: auto-backend-update  # Branche source (contenant vos changements)
+          base: master  # Branche cible (où fusionner les changements)
+          labels: "automatisé, intégration"
+          delete-branch: true  # Supprimer la branche après fusion
